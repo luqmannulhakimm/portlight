@@ -1,0 +1,46 @@
+{
+  "name": "portlight",
+  "version": "1.0.0",
+  "description": "A Windows desktop home for your localhost ports.",
+  "main": "src/main.js",
+  "private": true,
+  "author": "Portlight",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.js",
+    "test:ui": "node tests/ui.cjs",
+    "build": "electron-builder --win portable --x64",
+    "build:dir": "electron-builder --win --dir --x64"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3",
+    "playwright": "1.63.0",
+    "sharp": "0.35.5"
+  },
+  "build": {
+    "appId": "local.portlight.desktop",
+    "productName": "Portlight",
+    "artifactName": "Portlight-${version}-portable.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "assets/icon.ico",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "src/windows/*.ps1"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.ico",
+      "signExecutable": false
+    },
+    "portable": {
+      "requestExecutionLevel": "user"
+    }
+  }
+}

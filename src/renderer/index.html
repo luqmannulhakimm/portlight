@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Portlight</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="titlebar"><div class="titlebar-label"><span class="titlebar-dot"></span> PORTLIGHT <span class="titlebar-divider">/</span> LOCAL MACHINE</div><div class="window-controls"><button id="minimize" aria-label="Minimize window"></button><button id="maximize" aria-label="Maximize or restore window"></button><button id="close" aria-label="Close Portlight"></button></div></header>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">p<span></span></div><div>portlight<span>ROOM TO BUILD.</span></div></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav aria-label="Main navigation">
+        <button class="nav-item active" data-view="tcp"><span data-icon="layers"></span><span>All listeners</span><span id="nav-tcp" class="nav-count">—</span></button>
+        <button class="nav-item" data-view="developer"><span data-icon="code"></span><span>Developer ports</span><span id="nav-dev" class="nav-count">—</span></button>
+        <button class="nav-item" data-view="favorites"><span data-icon="star"></span><span>Pinned ports</span><span id="nav-fav" class="nav-count">0</span></button>
+        <button class="nav-item" data-view="udp"><span data-icon="radio"></span><span>UDP endpoints</span></button>
+        <div class="nav-separator"></div>
+        <button class="nav-item" data-view="activity"><span data-icon="history"></span><span>Activity</span><span id="nav-activity" class="nav-count hidden">0</span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="machine-card"><span class="machine-icon" data-icon="monitor"></span><div>This computer<span>Windows · local session</span></div><span class="live-dot"></span></div><button class="settings-button" id="settings"><span data-icon="settings"></span>Preferences<span class="shortcut">⌘</span></button><div class="sidebar-version">PORTLIGHT <span>v1.0.0</span></div></div>
+    </aside>
+    <main>
+      <div class="topline"><div class="breadcrumb">Workspace <span>/</span> <strong>Local machine</strong></div><div class="live-indicator" id="monitor-status"><span class="live-dot"></span>Live monitoring</div></div>
+      <section class="page-heading"><div><div class="eyebrow">LESS CLUTTER. MORE BUILDING.</div><h1 id="page-title">Localhost overview<span>.</span></h1><p id="page-description">See what’s running. Free up a port. Get back to your work.</p></div><button class="button secondary" id="refresh"><span data-icon="refresh"></span><span>Refresh</span></button></section>
+      <section class="stats" aria-label="Listener statistics">
+        <article class="stat-card primary"><div class="stat-label">Active TCP listeners<span data-icon="radio"></span></div><div class="stat-number" id="stat-tcp">—</div><div class="stat-bottom"><span><span class="dark-dot"></span>Listening on this machine</span><svg class="wave" viewBox="0 0 104 28" aria-hidden="true"><path d="M0 21h14l7-9 8 14 9-23 9 18h17l7-10 8 15 8-23 7 18h10"/></svg></div></article>
+        <article class="stat-card"><div class="stat-label">Developer processes<span data-icon="code"></span></div><div class="stat-number" id="stat-dev">—</div><div class="stat-bottom"><span>Runtimes & local services</span><span class="stat-tag">DEV</span></div></article>
+        <article class="stat-card"><div class="stat-label">Developer memory<span data-icon="memory"></span></div><div class="stat-number"><span id="stat-memory">—</span><span class="stat-unit" id="memory-unit">MB</span></div><div class="stat-bottom"><span>Across detected dev processes</span><span class="stat-tag">RAM</span></div></article>
+      </section>
+      <section class="listeners-panel" id="listeners-panel">
+        <div class="panel-header"><div class="panel-heading"><h2 id="list-title">Running listeners</h2><span id="list-count" class="count-pill">0</span></div><span class="small-muted" id="list-hint">TCP · IPv4 + IPv6</span></div>
+        <div class="toolbar"><label class="search"><span data-icon="search"></span><input id="search" type="search" placeholder="Search port, process or PID…" aria-label="Search listeners"><kbd>/</kbd></label><div class="toolbar-right"><label class="sort-label"><span data-icon="sort"></span><select id="sort" aria-label="Sort listeners"><option value="developer">Developer first</option><option value="port">Port number</option><option value="name">Process name</option><option value="memory">Memory usage</option></select></label><button id="stop-selected" class="button danger hidden"><span data-icon="stop"></span><span>Stop selected</span></button></div></div>
+        <div class="error-banner hidden" id="scan-error" role="alert"><span data-icon="alert"></span><span></span><button id="retry-scan">Retry</button></div>
+        <div class="table-scroller"><table><thead><tr><th class="check-cell"><input id="select-all" type="checkbox" aria-label="Select all stoppable visible processes"></th><th>PORT / PROTOCOL</th><th>PROCESS</th><th>PID</th><th>UPTIME</th><th class="actions-heading">ACTIONS</th></tr></thead><tbody id="port-rows"></tbody></table><div id="empty-state" class="empty-state hidden"><span class="empty-icon" data-icon="radio"></span><h3>No listeners here</h3><p>Start a local app and it will appear automatically.</p></div><div id="loading-state" class="loading-state"><span class="spinner"></span><p>Finding your local listeners…</p></div></div>
+        <div class="panel-footer"><span><span data-icon="shield"></span>Windows system processes are protected</span><span id="scan-time">Waiting for first scan</span></div>
+      </section>
+      <section id="activity-panel" class="listeners-panel hidden"><div class="panel-header"><div class="panel-heading"><h2>Session activity</h2><span class="count-pill" id="activity-count">0</span></div><span class="small-muted">This app session</span></div><div id="activity-list"></div></section>
+      <footer class="page-footer"><span class="footer-brand">● <strong>localhost</strong> feels lighter.</span><span>Made for the space between builds.</span></footer>
+    </main>
+  </div>
+  <div class="overlay hidden" id="modal-overlay"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1"><button class="modal-close icon-button" id="modal-close" aria-label="Close dialog"><span data-icon="close"></span></button><div id="modal-body"></div></section></div>
+  <div class="drawer-overlay hidden" id="drawer-overlay"><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1"><div class="drawer-header"><span class="eyebrow">LISTENER DETAILS</span><button class="icon-button" id="drawer-close" aria-label="Close listener details"><span data-icon="close"></span></button></div><div id="drawer-body"></div></aside></div>
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
